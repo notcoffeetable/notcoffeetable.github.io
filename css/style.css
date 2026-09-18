@@ -1,0 +1,176 @@
+/* elysiumanalytics.io — one stylesheet, no framework. */
+
+:root {
+    --ink:   #1a1a1a;
+    --paper: #fdfdfb;
+    --faint: #6b6b6b;
+    --rule:  #d8d8d2;
+    --link:  #1a4a7a;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --ink:   #dcdcd6;
+        --paper: #16171a;
+        --faint: #8f8f88;
+        --rule:  #33343a;
+        --link:  #8ab4dd;
+    }
+}
+
+body {
+    font-family: "SF Mono", SFMono-Regular, Menlo, Consolas, "DejaVu Sans Mono", monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink);
+    background: var(--paper);
+    max-width: 42em;
+    margin: 0 auto;
+    padding: 3em 1.5em 5em;
+    overflow-wrap: break-word;
+}
+
+h1 {
+    font-size: 1.15em;
+    font-weight: bold;
+    margin: 0;
+}
+
+h2 {
+    font-size: 1em;
+    font-weight: bold;
+    color: var(--faint);
+    margin: 0 0 0.75em;
+}
+
+p {
+    margin: 0 0 0.4em;
+}
+
+a {
+    color: var(--link);
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.bib a {
+    overflow-wrap: anywhere;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid var(--rule);
+    margin: 2.5em 0;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 0.4em;
+}
+
+.note {
+    color: var(--faint);
+}
+
+.tagline {
+    color: var(--faint);
+    margin-bottom: 1em;
+}
+
+/* Header: photo beside the name, stacking on narrow screens. */
+.masthead {
+    display: flex;
+    gap: 1.5em;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.masthead img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border: 1px solid var(--rule);
+}
+
+.masthead div {
+    flex: 1 1 18em;
+}
+
+.elsewhere li::before {
+    content: "\2192\00a0";
+    color: var(--faint);
+}
+
+/* Publications: hanging indent, the way a bibliography sets. */
+.bib li {
+    padding-left: 1.5em;
+    text-indent: -1.5em;
+    margin-bottom: 0.9em;
+    color: var(--faint);
+}
+
+.bib cite {
+    font-style: normal;
+    color: var(--ink);
+}
+
+/* Narrow screens: stack the masthead, tighten the gutters. */
+@media (max-width: 30em) {
+    body {
+        padding: 2em 1.1em 4em;
+    }
+
+    .masthead {
+        gap: 1em;
+    }
+
+    .masthead img {
+        width: 96px;
+        height: 96px;
+    }
+
+    .bib li {
+        padding-left: 1em;
+        text-indent: -1em;
+    }
+}
+
+/* One album's title is Unicode art. The spacing and the stacked combining
+   marks are the piece, so preserve them exactly: pre-formatted, free to
+   scroll sideways, and padded enough that 17 stacked descenders clear the
+   line below instead of colliding with it. */
+.art-entry {
+    margin-bottom: 0.4em;
+}
+
+.art-title {
+    display: block;
+    white-space: pre;
+    overflow-x: auto;
+    overflow-y: visible;
+    line-height: 1;
+    font-size: 1.25em;
+    padding: 1.4em 0 3em;
+}
+
+.art-link {
+    text-decoration: none;
+    color: var(--ink);
+}
+
+.art-link:hover .art-title {
+    color: var(--link);
+}
+
+.art-by {
+    display: block;
+    color: var(--faint);
+    margin-top: -1.4em;
+}
