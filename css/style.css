@@ -1,4 +1,4 @@
-/* elysiumanalytics.io — one stylesheet, no framework. */
+/* elysiumanalytics.io stylesheet */
 
 :root {
     --ink:   #1a1a1a;
@@ -84,7 +84,7 @@ li {
     margin-bottom: 1em;
 }
 
-/* Header: photo beside the name, stacking on narrow screens. */
+/* Header */
 .masthead {
     display: flex;
     gap: 1.5em;
@@ -108,7 +108,7 @@ li {
     color: var(--faint);
 }
 
-/* Publications: hanging indent, the way a bibliography sets. */
+/* Publications: hanging indent */
 .bib li {
     padding-left: 1.5em;
     text-indent: -1.5em;
@@ -121,7 +121,7 @@ li {
     color: var(--ink);
 }
 
-/* Narrow screens: stack the masthead, tighten the gutters. */
+/* Narrow screens */
 @media (max-width: 30em) {
     body {
         padding: 2em 1.1em 4em;
@@ -142,10 +142,7 @@ li {
     }
 }
 
-/* One album's title is Unicode art. The spacing and the stacked combining
-   marks are the piece, so preserve them exactly: pre-formatted, free to
-   scroll sideways, and padded enough that 17 stacked descenders clear the
-   line below instead of colliding with it. */
+/* special formatting for OoOoo album */
 .art-entry {
     margin-bottom: 0.4em;
 }
