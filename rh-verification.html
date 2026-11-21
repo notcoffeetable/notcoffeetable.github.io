@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RH Verification — Dean Bisogno</title>
+    <meta name="description" content="Status of an independent check of the Lean formalization accompanying Alpöge's announced proof of the Riemann Hypothesis.">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <p class="back"><a href="index.html">← Dean Bisogno</a></p>
+
+    <header>
+        <h1>RH Verification</h1>
+        <p class="tagline">checking the Lean formalization of Alpöge's announced proof of RH/GRH · last updated 2026-11-21</p>
+    </header>
+
+    <section>
+        <p>Levent Alpöge has announced a proof of RH and of GRH for Dirichlet <em>L</em>-functions, given as a
+            Lean&nbsp;4 formalization distributed as <code>alpo.ge/lean.tar.gz.part01</code>–<code>part14</code>.</p>
+        <p>Andrew Sutherland has independently checked the same archive and reports that it passes. Separately,
+            Alessandro Maria Masullo has circulated a human-written draft proof of GRH. Both are linked under
+            <a href="#elsewhere">Elsewhere</a>.</p>
+        <p>This page contains some of my own thoughts and an independent check of Alpöge's formalization on my personal hardware:
+            what has been checked, how, and what remains.</p>
+    </section>
+
+    <hr>
+
+    <section>
+        <h2>My own evolving thoughts</h2>
+            <p>The past year has seen rapid AI adoption and considerable progress throughout the sciences, perhaps
+                nowhere more so than in mathematics research. A confluence of modern factors now challenges
+                practicing mathematicians: constrained department budgets, large-scale reductions in science
+                funding, and agentic systems adept at navigating the intricate machinery of mathematical proof. For
+                a subject that demands such high investment, the vision of a new style of mathematics is
+                discomforting. Others have written and spoken better about the human
+                side of mathematics (see <a href="https://www.quantamagazine.org/is-ai-the-end-of-math-as-we-know-it-20261005/">Quanta</a>
+                and <a href="https://www.nytimes.com/video/podcasts/the-daily/100000011211514/why-ai-has-this-mathematician-in-tears.html"><em>The Daily</em></a>).</p>
+
+            <p><a href="https://www.quantamagazine.org/ai-has-solved-one-of-maths-1-million-millennium-prize-problems-20260908/">Navier–Stokes</a>
+                was a bellwether. But to me, an arithmetic geometer by training,
+                a proof of GRH is akin to the moon landing. A Lean-verified proof without complete human interpretation is something else: a turn in history we watched approach for miles that nevertheless
+                arrived sooner than some of us expected.</p>
+
+            <p>Evolution in our standards of proof is the history of mathematics. Euclid built geometry on axioms, while Diophantus proved by construction.
+                In the Renaissance and early modern period, proof became laissez-faire. Tartaglia guarded the solution
+                of the cubic as a trade secret until Cardano published it, algebra left the geometric standard of rigor
+                behind, and results were stated without proof (Fermat's margin famously so). Algebraists rebuilt their
+                subject on Cantor's set theory (Katz and Parshall, <em>Taming the Unknown</em>, 2014), and from 1900
+                through the 1940s Hilbert and then Bourbaki called for mathematics to return to simple axiomatic
+                systems. An established, machine-checked proof of GRH would turn the next page. If this is the new contract of proof, then I wonder what responsibility the individual holds for verifying theorems they wish to accept.</p>
+
+            <p>I have been heartened to read Masullo's draft manuscript and I am excited to follow its peer review. Unpacking Alpöge's result will undoubtedly yield novel insights and techniques as well.</p>
+
+            <p>I'm running my own verification with an AI agent's assistance, as seems fitting for this proof. I
+                priced out rented cloud compute, but the payoff wasn't there, so I am running it on my personal machine: AMD Ryzen 7 5700X3D (8C/16T), 32 GB RAM (WSL2
+                limited to 26 GB plus 48 GB swap), Ubuntu 24.04.5 on WSL2 (kernel 6.18.33.2), Windows 11,
+                build on a PNY CS2130 500 GB SSD. Completion ETA is sometime on Monday unless I hit a memory issue.</p>
+
+            <p class="note">— Dean Bisogno</p>
+    </section>
+
+    <hr>
+
+    <section id="elsewhere">
+        <h2>Elsewhere</h2>
+        <ul class="elsewhere">
+            <li><a href="https://math.mit.edu/~drew/grh/">Andrew Sutherland's verification files</a>
+                <span class="note">(MIT)</span>. A check of the same archive; his joined-archive SHA-256 matches
+                mine. He reports that all 175,187 modules compile, that <code>#print axioms</code> gives only
+                <code>propext</code>, <code>Classical.choice</code> and <code>Quot.sound</code> for the five main
+                theorems, and that <code>leanchecker</code>, nanoda, con-leche and lean4lean accept the proofs.</li>
+            <li><a href="https://math216.wordpress.com/2026/11/20/hurried-announcement-alessandro-masullo-grh/">Alessandro
+                Maria Masullo's draft proof of GRH</a> (<a href="https://math216.wordpress.com/wp-content/uploads/2026/11/the-music-of-the-primes.pdf"><em>The
+                Music of the Primes</em></a>), posted by Ravi Vakil on 2026-11-20. A separate, human-written
+                argument for Hecke <em>L</em>-functions; problems have since been reported. Not checked here.</li>
+        </ul>
+    </section>
+
+    <hr>
+
+    <section>
+        <h2>Status</h2>
+        <p><span class="status">[in progress]</span> Steps 1–4 done. Full build (step 5) started 2026-11-21
+            09:55 MST. As of 11:46 MST, 6,332 of 175,187 modules are built (3.6%), with no errors. At the current
+            rate the build would finish around 2026-11-23, though per-module cost varies.</p>
+    </section>
+
+    <hr>
+
+    <section>
+        <h2>Steps</h2>
+        <ul class="steps">
+            <li><span class="status done">[done]</span> 1. Source and integrity
+                <span class="detail">14 parts; checksums below. The joined archive decompresses cleanly to
+                    175,190 files (175,187 <code>.lean</code>, about 17.4M lines). No paths escape the archive
+                    directory; no symlinks.</span></li>
+            <li><span class="status done">[done]</span> 2. Toolchain and dependencies
+                <span class="detail">Lean <code>v4.33.1</code> as pinned, on Linux (WSL2). Mathlib at the pinned
+                    commit <code>0df444a3</code>.</span></li>
+            <li><span class="status done">[done]</span> 3. Theorem statements
+                <span class="detail"><code>Main.lean</code> proves Mathlib's <code>RiemannHypothesis</code> and four
+                    statements in <code>Statements.lean</code>, which imports only Mathlib. The four: RH for ζ;
+                    <em>L</em>(χ,&nbsp;<em>s</em>)&nbsp;≠&nbsp;0 for Re&nbsp;<em>s</em>&nbsp;&gt;&nbsp;1/2 and all
+                    Dirichlet χ; critical-strip zeros on Re&nbsp;<em>s</em>&nbsp;=&nbsp;1/2 for all χ; the same for
+                    primitive χ. Each matches the standard formulation. The reduction from non-vanishing to RH/GRH
+                    uses the functional equation, the Euler factors from changing modulus, and the non-vanishing
+                    of Γ<sub>ℝ</sub>.</span></li>
+            <li><span class="status done">[done]</span> 4. Text scan for checker bypasses
+                <span class="detail">No <code>axiom</code>, <code>sorry</code>/<code>admit</code>,
+                    <code>native_decide</code>/<code>ofReduceBool</code>, <code>implemented_by</code>/<code>extern</code>,
+                    kernel-skipping options, or notation redefining ℂ, ℝ, <code>=</code> or <code>&lt;</code>.
+                    The three custom metaprograms build proof terms or add declarations via <code>addDecl</code>,
+                    so their output is kernel-checked; none adds axioms. Steps 6–7 are the definitive checks.</span></li>
+            <li><span class="status">[running]</span> 5. Full build: <code>lake build Main</code>
+                <span class="detail">All 175,187 modules. Estimated about 400 CPU-hours from 30 sampled
+                    files.</span></li>
+            <li><span class="status">[pending]</span> 6. Axiom audit
+                <span class="detail"><code>#print axioms</code> on the five main theorems, plus a census of every
+                    axiom in the imported environment. Expected: <code>propext</code>, <code>Classical.choice</code>,
+                    <code>Quot.sound</code>.</span></li>
+            <li><span class="status">[pending]</span> 7. Kernel replay
+                <span class="detail"><code>leanchecker</code> (bundled with the toolchain) re-checks every
+                    declaration in the project's compiled output.</span></li>
+            <li><span class="status">[pending]</span> 8. Replay including Mathlib
+                <span class="detail">The build uses Mathlib's precompiled cache.
+                    <code>leanchecker --fresh Main</code> replays every constant, Mathlib included, removing that
+                    dependency.</span></li>
+        </ul>
+    </section>
+
+    <hr>
+
+    <section>
+        <h2>Scope</h2>
+        <p>A successful check shows the stated theorems follow from Lean's logic, Mathlib's definitions and
+            Lean's standard axioms, assuming the kernel is correct. It depends on step 3: the theorems must say
+            what they are claimed to say.</p>
+        <p>It does not give a human-readable proof or check the informal account in the announcement.</p>
+    </section>
+
+    <hr>
+
+    <section>
+        <h2>Checksums (SHA-256)</h2>
+<pre>86974b1c242ca7b6748f3299df4fc64ee0f6e06c776ac964fb64888101a3de77  part01
+1c2a2477354a9dfa97ff1ce54861e96ed885bd456fffbaaabc2028314a229c42  part02
+1465a23b1b579a881e24e5ffaf7c4c3727af28ea24741f1ec80e1d67947530a3  part03
+3929e327eecb4e2c5c7cae30e104e6a4a52fa6b82d28325bcda8e9da1c86893b  part04
+f25d7e80f7c4ad6d674aa18b323ca760f848857c8755501c149317c38a66c75d  part05
+a8c651a68327811b37dce3cca8eda5e0b2102fa227c0d395cbb7553e4dd69939  part06
+65c7e502a9b236a0f68d9e0aa6e089d4c09b9fc7a0960a149384063ccbe5e869  part07
+71b027ad6e4179c3a50ce72921e3fec0a2dd751ec7472ac2c644ad145a50ec7e  part08
+47718977ebaa8613f1647e93134479780db9320c5fa911463fd312a6257b796f  part09
+1d85ece78e0779cec26b0cce29c6462d9f90180e56d78120b152df101715240b  part10
+cf83a159d1a9540012229c376562587dd966da10cd657cbcef53acfd03232448  part11
+1aa5415bd2db83b2689afeeb946419303b3c4f599ae790ad74d38465f768b502  part12
+2de4edbce8ebdbfd0b94bc89bab518c7294209f408ec5b14a7be9e4832d9da81  part13
+53f8ea43a9b5dcab97b84a52f3ac2848711c844a5420a4c56418093bacb3c6f6  part14
+9631b4f020199e580ba86178cb56c6e9b09f690c2369a80dc4334aa93f49c7fc  joined</pre>
+        <p class="note"><code>lean.tar.gz.partNN</code>, fetched 2026-11-21; <code>joined</code> is their
+            concatenation.</p>
+    </section>
+
+    <hr>
+
+    <section>
+        <h2>Updates</h2>
+        <p class="note">Updated at each milestone.</p>
+        <ul class="log">
+            <li><strong>2026-11-21</strong> — Steps 1–4 done; nothing found. Full build started 09:55 MST; 6,332 modules
+                built by 11:46, no errors.</li>
+        </ul>
+    </section>
+
+</body>
+
+</html>

@@ -142,6 +142,44 @@ li {
     }
 }
 
+/* RH verification page */
+.back {
+    margin-bottom: 2em;
+}
+
+.status {
+    color: var(--faint);
+}
+
+.status.done {
+    color: var(--ink);
+}
+
+.steps li {
+    padding-left: 1.5em;
+    text-indent: -1.5em;
+    margin-bottom: 0.9em;
+}
+
+.steps .detail {
+    display: block;
+    text-indent: 0;
+    color: var(--faint);
+}
+
+.log li {
+    margin-bottom: 0.9em;
+}
+
+pre {
+    font-family: inherit;
+    font-size: 0.8em;
+    line-height: 1.5;
+    overflow-x: auto;
+    padding: 0.75em 0;
+    margin: 0 0 0.75em;
+}
+
 /* special formatting for OoOoo album */
 .art-entry {
     margin-bottom: 0.4em;
