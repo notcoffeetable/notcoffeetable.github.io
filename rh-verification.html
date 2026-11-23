@@ -23,7 +23,7 @@
 
     <header>
         <h1>RH Verification</h1>
-        <p class="tagline">checking the Lean formalization of Alpöge's announced proof of RH/GRH · last updated 2026-11-21</p>
+        <p class="tagline">checking the Lean formalization of Alpöge's announced proof of RH/GRH · last updated 2026-11-23</p>
     </header>
 
     <section>
@@ -70,6 +70,9 @@
                 build on a PNY CS2130 500 GB SSD. Completion ETA is sometime on Monday unless I hit a memory issue.</p>
 
             <p class="note">— Dean Bisogno, 2026-11-21</p>
+
+            <p>On Saturday memory faults halted my local execution. Testing found some bad pages in my RAM which I will need to investigate further. I moved the build to ECC cloud compute that afternoon. This morning the build stage completed after 39 hours and axioms cleared in about 20 minutes. Standard execution of the replay step runs multi-threaded leanchecker. I am sharding my replay to reduce heap and keep it within the environment's resources.</p>
+            <p class="note">— Dean Bisogno, 2026-11-23</p>
     </section>
 
     <hr>
@@ -93,9 +96,10 @@
 
     <section>
         <h2>Status</h2>
-        <p><span class="status">[in progress]</span> Steps 1–4 done. Full build (step 5) started 2026-11-21
-            09:55 MST. As of 11:46 MST, 6,332 of 175,187 modules are built (3.6%), with no errors. At the current
-            rate the build would finish around 2026-11-23, though per-module cost varies.</p>
+        <p><span class="status">[in progress]</span> Steps 1–6 done. Build finished 2026-11-23 06:54 MST, no
+            errors; axiom audit passed. Kernel replay (step 7) running since 07:17 MST; step 8 follows.</p>
+        <p>Hardware: Hetzner Cloud CPX62 (16 vCPU AMD EPYC Genoa, 32 GB ECC RAM, Ubuntu 24.04.5). Nothing from
+            the earlier local attempt is used.</p>
     </section>
 
     <hr>
@@ -108,7 +112,7 @@
                     175,190 files (175,187 <code>.lean</code>, about 17.4M lines). No paths escape the archive
                     directory; no symlinks.</span></li>
             <li><span class="status done">[done]</span> 2. Toolchain and dependencies
-                <span class="detail">Lean <code>v4.33.1</code> as pinned, on Linux (WSL2). Mathlib at the pinned
+                <span class="detail">Lean <code>v4.33.1</code> as pinned, on Linux. Mathlib at the pinned
                     commit <code>0df444a3</code>.</span></li>
             <li><span class="status done">[done]</span> 3. Theorem statements
                 <span class="detail"><code>Main.lean</code> proves Mathlib's <code>RiemannHypothesis</code> and four
@@ -124,16 +128,20 @@
                     kernel-skipping options, or notation redefining ℂ, ℝ, <code>=</code> or <code>&lt;</code>.
                     The three custom metaprograms build proof terms or add declarations via <code>addDecl</code>,
                     so their output is kernel-checked; none adds axioms. Steps 6–7 are the definitive checks.</span></li>
-            <li><span class="status">[running]</span> 5. Full build: <code>lake build Main</code>
-                <span class="detail">All 175,187 modules. Estimated about 400 CPU-hours from 30 sampled
-                    files.</span></li>
-            <li><span class="status">[pending]</span> 6. Axiom audit
-                <span class="detail"><code>#print axioms</code> on the five main theorems, plus a census of every
-                    axiom in the imported environment. Expected: <code>propext</code>, <code>Classical.choice</code>,
-                    <code>Quot.sound</code>.</span></li>
-            <li><span class="status">[pending]</span> 7. Kernel replay
+            <li><span class="status done">[done]</span> 5. Full build: <code>lake build Main</code>
+                <span class="detail">All 175,187 modules built, exit status 0, no error lines in the log.
+                    39&nbsp;h&nbsp;05&nbsp;m wall time on 16 vCPU, about 575 CPU-hours (421 user, 153 system),
+                    largest process 24.5 GB resident.</span></li>
+            <li><span class="status done">[done]</span> 6. Axiom audit
+                <span class="detail"><code>#print axioms</code> on each of the five main theorems gives exactly
+                    <code>propext</code>, <code>Classical.choice</code>, <code>Quot.sound</code>. Census of the
+                    imported environment (186,200 modules, 2,701,132 constants): 15 axioms, all in Lean core,
+                    the same set as importing <code>Statements</code> (Mathlib only).</span></li>
+            <li><span class="status">[running]</span> 7. Kernel replay
                 <span class="detail"><code>leanchecker</code> (bundled with the toolchain) re-checks every
-                    declaration in the project's compiled output.</span></li>
+                    declaration in the project's compiled output. Run as parallel single-threaded processes over
+                    disjoint module groups; passes only if every group succeeds and every module is covered
+                    exactly once. Olean hashes are recorded before replay and re-checked after step 8.</span></li>
             <li><span class="status">[pending]</span> 8. Replay including Mathlib
                 <span class="detail">The build uses Mathlib's precompiled cache.
                     <code>leanchecker --fresh Main</code> replays every constant, Mathlib included, removing that
@@ -180,6 +188,10 @@ cf83a159d1a9540012229c376562587dd966da10cd657cbcef53acfd03232448  part11
         <h2>Updates</h2>
         <p class="note">Updated at each milestone.</p>
         <ul class="log">
+            <li><strong>2026-11-23</strong> — Build done: 175,187 modules, no errors, 39&nbsp;h&nbsp;05&nbsp;m.
+                Axiom audit passed. Kernel replay started 07:17 MST.</li>
+            <li><strong>2026-11-21</strong> — Local build stopped at 9.5% (memory fault). Restarted from scratch
+                on a Hetzner CPX62 (ECC) at 15:49 MST.</li>
             <li><strong>2026-11-21</strong> — Steps 1–4 done; nothing found. Full build started 09:55 MST; 6,332 modules
                 built by 11:46, no errors.</li>
         </ul>
