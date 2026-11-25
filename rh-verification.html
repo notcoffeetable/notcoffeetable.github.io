@@ -23,7 +23,7 @@
 
     <header>
         <h1>RH Verification</h1>
-        <p class="tagline">checking the Lean formalization of Alpöge's announced proof of RH/GRH · last updated 2026-11-23</p>
+        <p class="tagline">checking the Lean formalization of Alpöge's announced proof of RH/GRH · last updated 2026-11-25</p>
     </header>
 
     <section>
@@ -40,6 +40,51 @@
 
     <section>
         <h2>My own evolving thoughts</h2>
+            <p><strong>State of affairs.</strong> A lot of communication is happening on X. The Clay Institute requires publication and a two-year wait. Frank Calegari has a nice write-up with some reflections <a href="https://galoisrepresentations.org/2026/11/23/initial-thoughts-on-rh/">Initial Thoughts on RH</a>. It feels like a drag race. The Masullo manuscript has been picked up by a public collaboration of humans applying agents to the problem. Meanwhile, others have produced iteratively more human-readable versions of Alpöge's proof (below).</p>
+            <p>There continues to be a human story as well, as emotions are vented on social media. I do not envy Alpöge. Any result in this direction is due strict scrutiny. The tooling and the manner of the announcement naturally invite further criticism. While many objects of concern in the proof are familiar to me, I do not claim any authority on the veracity of claims. What follows is my opinion: he will be credited with this result, and the record will assign to him novel ideas in its pursuit.</p>
+            <p><strong>My build.</strong> The Lean FRO and Mathlib Initiative certified the statement and proof
+                on 2026-11-21, and Andrew Sutherland and Michael Rubinstein have reported independent
+                compile-and-check runs (see <a href="#elsewhere">Elsewhere</a>). My run finished this morning
+                with every check passing. The logs, checksums, coverage lists and scripts are published as an
+                <a href="https://github.com/notcoffeetable/notcoffeetable.github.io/releases/tag/rh-evidence-2026-11-25">evidence release</a>.</p>
+
+            <p><strong>Masullo's manuscript.</strong> In my original post I mentioned Alessandro Maria Masullo's
+                <em>The Music of the Primes</em>, a 940-page manuscript for GRH for Hecke
+                <em>L</em>-functions over every number field. Its strategy is distinct from the path taken by Alpöge's work. Masullo's argument works primarily with GL<sub>1</sub>, using technology I am not familiar with. Leveraging agents to abstract the arguments to a level I am comfortable with yields the following description.
+                The argument is built on a trace formula on the idele class group, computed in Hardy–Sobolev completions. In that topology only
+                zeros near the critical line can contribute, while the geometric side cancels prime by prime.
+                An open effort to formalize it in Lean, <a href="https://github.com/mccorvie/riemann-masullo">riemann-masullo</a>,
+                has worked in public since then. Its contributors are people and their coding agents, and its rules
+                exclude anything taken from the November 2026 RH formalization. As of yesterday there are approximately 90
+                contributors, about 13,200 theorems stated in Lean and an errata file of about 790 entries.
+                The formalized main claim now rests on one unproved statement, the cancellation of the zeros
+                outside the strip in the trace formula (Theorem 12.5.1.1). The final chapter, which deduces the
+                location of the zeros, is still unwritten in the draft.</p>
+
+            <p><strong>Reading Alpöge's proof.</strong> A parallel effort has been turning the Lean
+                development into mathematics a person can read. Jimmie Adriazola (Arizona State) has written
+                the argument out as one continuous conventional proof, the best account I am aware of
+                (<a href="https://github.com/jimjamzola/RH-Alpoge-Reconstruction">RH-Alpoge-Reconstruction</a>). He traced it back from the formal theorem
+                <code>riemannHypothesis</code> through about 767,000 of its roughly 1.07 million declarations. The
+                shape is Bombieri–Stepanov. A quantitative Landau theorem reduces the zero-free half-plane to a one-sided
+                square-root bound for smoothed prime sums, and that bound comes from playing the <em>p</em>-adic
+                divisibility of a chain of about √<em>x</em> theta lifts against a slope inequality. The chain plays
+                the role of Stepanov's multiplicity. Adriazola states the internal steps he has not yet given conventional
+                proofs for. Among them are a Tate–Shafarevich bound that implies
+                a bound towards Vandiver's conjecture and an automorphy statement for residually reducible
+                representations of unitary type. These are proved in Lean, but not yet on paper.
+                Zhang, Rubinstein, Naskręcki, Epstein, Brox and Slijepčević have written accounts, maps and
+                distillations as well.</p>
+
+            <p><strong>Concerns about the Lean proof.</strong> Jenny Nielsen (PhD candidate, University of Kansas)
+                claims the formal proof is tautological, in effect "RH = RH"
+                (<a href="https://philarchive.org/rec/NIEIOT-2">preprint</a>). I record this as part of the
+                contemporaneous account. I expect the reconstruction of Alpöge's argument above to answer it.</p>
+            <p class="note">— Dean Bisogno, 2026-11-25</p>
+
+            <p>On Saturday memory faults halted my local execution. Testing found some bad pages in my RAM which I will need to investigate further. I moved the build to ECC cloud compute that afternoon. This morning the build stage completed after 39 hours and axioms cleared in about 20 minutes. Standard execution of the replay step runs multi-threaded leanchecker. I am sharding my replay to reduce heap and keep it within the environment's resources.</p>
+            <p class="note">— Dean Bisogno, 2026-11-23</p>
+
             <p>The past year has seen rapid AI adoption and considerable progress throughout the sciences, perhaps
                 nowhere more so than in mathematics research. A confluence of modern factors now challenges
                 practicing mathematicians: constrained department budgets, large-scale reductions in science
@@ -70,9 +115,6 @@
                 build on a PNY CS2130 500 GB SSD. Completion ETA is sometime on Monday unless I hit a memory issue.</p>
 
             <p class="note">— Dean Bisogno, 2026-11-21</p>
-
-            <p>On Saturday memory faults halted my local execution. Testing found some bad pages in my RAM which I will need to investigate further. I moved the build to ECC cloud compute that afternoon. This morning the build stage completed after 39 hours and axioms cleared in about 20 minutes. Standard execution of the replay step runs multi-threaded leanchecker. I am sharding my replay to reduce heap and keep it within the environment's resources.</p>
-            <p class="note">— Dean Bisogno, 2026-11-23</p>
     </section>
 
     <hr>
@@ -89,6 +131,16 @@
                 Maria Masullo's proposed draft proof of GRH</a> (<a href="https://math216.wordpress.com/wp-content/uploads/2026/11/the-music-of-the-primes.pdf"><em>The
                 Music of the Primes</em></a>), posted by Ravi Vakil on 2026-11-20. A separate, human-written
                 argument for Hecke <em>L</em>-functions.</li>
+            <li><a href="https://leanprover-community.github.io/blog/posts/riemann-hypothesis/">Lean verification of
+                the Riemann Hypothesis</a> <span class="note">(Lean FRO and Mathlib Initiative, 2026-11-21)</span>. The joint
+                statement certifying the formal statement and proof.</li>
+            <li><a href="https://www.math.uwaterloo.ca/~mrubinst/alpoge_claude_grh/">Michael Rubinstein's guide and
+                verification run</a> <span class="note">(Waterloo)</span>. It includes a check by the independent kernel nanoda, and an exposition
+                specialized to ζ.</li>
+            <li><a href="https://github.com/jimjamzola/RH-Alpoge-Reconstruction">Jimmie Adriazola, <em>The Alpöge Proof of the Riemann Hypothesis</em></a>
+                <span class="note">(Arizona State)</span>. A conventional write-up of the argument, with its open steps listed.</li>
+            <li><a href="https://github.com/mccorvie/riemann-masullo">riemann-masullo</a>. The open Lean
+                formalization of Masullo's manuscript.</li>
         </ul>
     </section>
 
@@ -96,8 +148,13 @@
 
     <section>
         <h2>Status</h2>
-        <p><span class="status">[in progress]</span> Steps 1–6 done. Build finished 2026-11-23 06:54 MST, no
-            errors; axiom audit passed. Kernel replay (step 7) running since 07:17 MST; step 8 follows.</p>
+        <p><span class="status done">[done]</span> All eight steps done. <code>leanchecker --fresh Main</code> finished
+            2026-11-25 10:41 MST with exit status 0. Olean hashes are unchanged from before the kernel replay to after step 8.</p>
+        <p>Evidence from the run is in the
+            <a href="https://github.com/notcoffeetable/notcoffeetable.github.io/releases/tag/rh-evidence-2026-11-25">rh-evidence-2026-11-25</a>
+            release. It holds every stage's logs and exit codes, olean hashes from before and after checking, replay
+            coverage lists, the toolchain's hashes and every script used. The README inside explains how to verify it.
+            Alpöge's archive itself is not included. Its checksums are below.</p>
         <p>Hardware: Hetzner Cloud CPX62 (16 vCPU AMD EPYC Genoa, 32 GB ECC RAM, Ubuntu 24.04.5). Nothing from
             the earlier local attempt is used.</p>
     </section>
@@ -137,15 +194,22 @@
                     <code>propext</code>, <code>Classical.choice</code>, <code>Quot.sound</code>. Census of the
                     imported environment (186,200 modules, 2,701,132 constants): 15 axioms, all in Lean core,
                     the same set as importing <code>Statements</code> (Mathlib only).</span></li>
-            <li><span class="status">[running]</span> 7. Kernel replay
-                <span class="detail"><code>leanchecker</code> (bundled with the toolchain) re-checks every
-                    declaration in the project's compiled output. Run as parallel single-threaded processes over
-                    disjoint module groups; passes only if every group succeeds and every module is covered
-                    exactly once. Olean hashes are recorded before replay and re-checked after step 8.</span></li>
-            <li><span class="status">[pending]</span> 8. Replay including Mathlib
+            <li><span class="status done">[done]</span> 7. Kernel replay
+                <span class="detail">Every declaration in the project's compiled output was re-checked by Lean's kernel.
+                    Stock <code>leanchecker</code> rescans every olean once for each target, which would have taken about
+                    ten days here. So the replay used a short driver that calls leanchecker's own
+                    <code>replayFromImports</code>, copied verbatim, on explicit module lists: 351 chunks of 500 modules
+                    each, run as 12 parallel single-threaded processes. It passes only if every chunk exits cleanly and
+                    every module is reported exactly once. Result: 175,187 of 175,187, in 29&nbsp;h&nbsp;56&nbsp;m.
+                    Before the swap, the driver and stock leanchecker gave the same results on a test set, and both rejected
+                    a module that used an environment hack. Step 8 uses the stock binary. Olean hashes were
+                    recorded before replay and are re-checked after step 8.</span></li>
+            <li><span class="status done">[done]</span> 8. Replay including Mathlib
                 <span class="detail">The build uses Mathlib's precompiled cache.
                     <code>leanchecker --fresh Main</code> replays every constant, Mathlib included, removing that
-                    dependency.</span></li>
+                    dependency. It exited with status 0 after 19&nbsp;h&nbsp;27&nbsp;m in a single thread, largest process
+                    25.9 GB resident. Afterwards the olean hashes recorded before step 7 were re-checked. All 175,187 project
+                    and 8,700 package oleans were unchanged.</span></li>
         </ul>
     </section>
 
@@ -180,6 +244,9 @@ cf83a159d1a9540012229c376562587dd966da10cd657cbcef53acfd03232448  part11
 9631b4f020199e580ba86178cb56c6e9b09f690c2369a80dc4334aa93f49c7fc  joined</pre>
         <p class="note"><code>lean.tar.gz.partNN</code>, fetched 2026-11-21; <code>joined</code> is their
             concatenation.</p>
+<pre>76a151a8e5f8b611bb4d1157a81686696f764de132b952e495457a3f572c1038  cpx62-evidence-20261125T175435Z-public.tar</pre>
+        <p class="note">The evidence bundle in the
+            <a href="https://github.com/notcoffeetable/notcoffeetable.github.io/releases/tag/rh-evidence-2026-11-25">rh-evidence-2026-11-25</a> release.</p>
     </section>
 
     <hr>
@@ -188,6 +255,10 @@ cf83a159d1a9540012229c376562587dd966da10cd657cbcef53acfd03232448  part11
         <h2>Updates</h2>
         <p class="note">Updated at each milestone.</p>
         <ul class="log">
+            <li><strong>2026-11-25</strong> — Replay including Mathlib done. <code>leanchecker --fresh Main</code>
+                exited 0 at 10:41 MST after 19&nbsp;h&nbsp;27&nbsp;m. Olean hashes unchanged. All steps done. Evidence bundle released.</li>
+            <li><strong>2026-11-24</strong> — Kernel replay done: 175,187 of 175,187 modules. <code>leanchecker
+                --fresh Main</code> started 15:14 MST.</li>
             <li><strong>2026-11-23</strong> — Build done: 175,187 modules, no errors, 39&nbsp;h&nbsp;05&nbsp;m.
                 Axiom audit passed. Kernel replay started 07:17 MST.</li>
             <li><strong>2026-11-21</strong> — Local build stopped at 9.5% (memory fault). Restarted from scratch
